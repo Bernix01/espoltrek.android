@@ -1,0 +1,15 @@
+events.js:160
+      throw er; // Unhandled 'error' event
+      ^
+
+Error: listen EADDRINUSE :::8000
+    at Object.exports._errnoException (util.js:1022:11)
+    at exports._exceptionWithHostPort (util.js:1045:20)
+    at Server._listen2 (net.js:1262:14)
+    at listen (net.js:1298:10)
+    at Server.listen (net.js:1376:9)
+    at Server.listen (/home/belen/Desktop/ESPOL-TREK/node_modules/restify/lib/server.js:398:32)
+    at Object.<anonymous> (/home/belen/Desktop/ESPOL-TREK/app.js:9:5)
+    at Module._compile (module.js:573:32)
+    at Object.Module._extensions..js (module.js:582:10)
+    at Module.load (module.js:490:32)
