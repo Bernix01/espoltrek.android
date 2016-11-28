@@ -1,11 +1,9 @@
-package sdgihdgf.espoltrek;
+package sdgihdgf.espoltrek.models;
 
 import java.io.Serializable;
 import java.util.ArrayList;
 
-/**
- * Created by FIMCP on 24/11/2016.
- */
+
 
 public class Lugar implements Serializable {
 

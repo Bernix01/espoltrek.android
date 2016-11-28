@@ -8,6 +8,6 @@ app.use(restify.queryParser());
 
 app.listen(config.port, function() {
 	console.log('server listening on port number', config.port);
-	
+
 });
-var routes = require('./routes')(app);
+var routes = require('./routes/rutasLugar')(app);
