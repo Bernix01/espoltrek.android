@@ -34,6 +34,9 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/title_activity_login" />
+        <activity
+            android:name=".LoginActivity3"
+            android:label="@string/title_activity_login3"></activity>
     </application>
 
 </manifest>

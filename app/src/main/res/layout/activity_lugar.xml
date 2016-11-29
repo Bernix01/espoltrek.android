@@ -15,14 +15,12 @@
             app:contentScrim="?attr/colorPrimary"
             app:layout_scrollFlags="scroll|exitUntilCollapsed">
 
-            <ImageView
-                android:id="@+id/expandedImage"
+            <com.google.vr.sdk.widgets.pano.VrPanoramaView
+                android:id="@+id/pano_view"
+                android:layout_margin="5dip"
                 android:layout_width="match_parent"
-                android:layout_height="200dp"
-                android:scaleType="centerCrop"
-                android:src="@drawable/asd"
-                app:layout_collapseMode="parallax"
-                app:layout_collapseParallaxMultiplier="0.7" />
+                android:scrollbars="@null"
+                android:layout_height="250dip" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -42,18 +40,15 @@
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
+<RelativeLayout
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
 
-        <com.google.vr.sdk.widgets.pano.VrPanoramaView
-            android:id="@+id/pano_view"
-            android:layout_margin="5dip"
-            android:layout_width="match_parent"
-            android:scrollbars="@null"
-            android:layout_height="250dip" />
         <TextView
             android:layout_width="fill_parent"
             android:layout_height="wrap_content"
             android:text="@string/large_text" />
-
+    </RelativeLayout>
 
     </android.support.v4.widget.NestedScrollView>
 
