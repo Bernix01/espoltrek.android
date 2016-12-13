@@ -36,14 +36,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-        FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
-        fab.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View view) {
-                Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
-                        .setAction("Action", null).show();
-            }
-        });
 
         //se recorre la base
         //por cada documento se crea un objeto lugar, con id,latitud y longitud
@@ -93,7 +85,6 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             @Override
             public boolean onMarkerClick(Marker marker) {
                 int id = hmap.get(marker);
-                Toast.makeText(getApplicationContext(), "Se tocó el: " + id, Toast.LENGTH_LONG).show();
                 Intent i = new Intent(getApplicationContext(), LugarActivity.class);
                 Lugar l = new Lugar();
                 i.putExtra("lugar", l);

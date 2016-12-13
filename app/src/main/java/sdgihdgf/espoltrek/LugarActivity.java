@@ -147,7 +147,7 @@ public class LugarActivity extends Activity {
                     || fileInformation[0] == null || fileInformation[0].first == null) {
                 AssetManager assetManager = getAssets();
                 try {
-                    istr = assetManager.open("parque.jpg");
+                    istr = assetManager.open("parqueaja.jpg");
                     panoOptions = new VrPanoramaView.Options();
                     panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
                 } catch (IOException e) {

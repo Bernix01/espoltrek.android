@@ -1,0 +1,10 @@
+<component name="libraryTable">
+  <library name="commonwidget-unspecified">
+    <CLASSES>
+      <root url="jar://$PROJECT_DIR$/build/intermediates/exploded-aar/espoltrek.android/commonwidget/unspecified/jars/classes.jar!/" />
+      <root url="file://$PROJECT_DIR$/build/intermediates/exploded-aar/espoltrek.android/commonwidget/unspecified/res" />
+    </CLASSES>
+    <JAVADOC />
+    <SOURCES />
+  </library>
+</component>
