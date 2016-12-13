@@ -15,13 +15,13 @@ import sdgihdgf.espoltrek.models.Usuario;
 
 
 public interface EspolTrekInterface {
-    @GET("ListarLugares.php?")
+    @GET("lugar")
     Call<List<Lugar>>getLugares();
 
-    @GET("MostrarLugarPorId.php?")
+    @GET("lugar/{id_lugar}")
     Call<Lugar>getLugarPorId(@Query("id_lugar")int idLugar);
 
-    @GET("ObtenerUsuarioPorId")
+    @GET("user/{id_usuario}")
     Call<Usuario>getUsuarioPorId(@Query("id_usuario")int idUsuario);
     
 }

@@ -1,33 +1,43 @@
 package sdgihdgf.espoltrek;
 
 import android.content.Intent;
+import android.content.res.Resources;
 import android.os.Bundle;
-import android.support.design.widget.FloatingActionButton;
+import android.support.design.widget.CoordinatorLayout;
 import android.support.design.widget.Snackbar;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
+import android.util.Log;
 import android.view.Menu;
 import android.view.MenuItem;
-import android.view.View;
-import android.widget.Toast;
 
 import com.google.android.gms.maps.CameraUpdateFactory;
 import com.google.android.gms.maps.GoogleMap;
 import com.google.android.gms.maps.OnMapReadyCallback;
 import com.google.android.gms.maps.SupportMapFragment;
+import com.google.android.gms.maps.model.BitmapDescriptorFactory;
+import com.google.android.gms.maps.model.CameraPosition;
 import com.google.android.gms.maps.model.LatLng;
+import com.google.android.gms.maps.model.MapStyleOptions;
 import com.google.android.gms.maps.model.Marker;
 import com.google.android.gms.maps.model.MarkerOptions;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.List;
 
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 import sdgihdgf.espoltrek.models.Lugar;
+import sdgihdgf.espoltrek.server.ETRest;
 
 public class MainActivity extends AppCompatActivity implements OnMapReadyCallback {
+    private static final String TAG = MainActivity.class.getCanonicalName();
     private GoogleMap mMap;
     private ArrayList<Lugar> arregloLugares;
-    private HashMap<Marker, Integer> diccionarioMarcadores;
+    private HashMap<Marker, Lugar> hmap;
+    private CoordinatorLayout root;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -36,7 +46,7 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
-
+        root = (CoordinatorLayout) findViewById(R.id.root);
         //se recorre la base
         //por cada documento se crea un objeto lugar, con id,latitud y longitud
         //
@@ -74,23 +84,63 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
     @Override
     public void onMapReady(GoogleMap googleMap) {
         mMap = googleMap;
-        final HashMap<Marker, Integer> hmap = new HashMap<>();
-        // Add a marker in Sydney and move the camera
-        LatLng sydney = new LatLng(-34, 151);
+        try {
+            // Customise the styling of the base map using a JSON object defined
+            // in a raw resource file.
+            boolean success = googleMap.setMapStyle(
+                    MapStyleOptions.loadRawResourceStyle(
+                            this, R.raw.styles));
 
-        Marker m = mMap.addMarker(new MarkerOptions().position(sydney).title("Marker in Sydney"));
-        hmap.put(m, 1);
-        mMap.moveCamera(CameraUpdateFactory.newLatLng(sydney));
+            if (!success) {
+                Log.e(TAG, "Style parsing failed.");
+            }
+        } catch (Resources.NotFoundException e) {
+            Log.e(TAG, "Can't find style. Error: ", e);
+        }
+        hmap = new HashMap<>();
+
         mMap.setOnMarkerClickListener(new GoogleMap.OnMarkerClickListener() {
             @Override
             public boolean onMarkerClick(Marker marker) {
-                int id = hmap.get(marker);
                 Intent i = new Intent(getApplicationContext(), LugarActivity.class);
-                Lugar l = new Lugar();
+                Lugar l = hmap.get(marker);
                 i.putExtra("lugar", l);
                 startActivity(i);
                 return true;
             }
         });
+        mMap.getUiSettings().setCompassEnabled(false);
+        mMap.getUiSettings().setTiltGesturesEnabled(false);
+        getData();
+    }
+
+    public void getData() {
+        ETRest.get().service().getLugares().enqueue(new Callback<List<Lugar>>() {
+            @Override
+            public void onResponse(Call<List<Lugar>> call, Response<List<Lugar>> response) {
+                Log.e(TAG, response.raw().toString());
+                arregloLugares = (ArrayList<Lugar>) response.body();
+                displayData();
+            }
+
+            @Override
+            public void onFailure(Call<List<Lugar>> call, Throwable t) {
+                Snackbar.make(root, t.getLocalizedMessage(), Snackbar.LENGTH_INDEFINITE).show();
+            }
+        });
+    }
+
+    private void displayData() {
+        if (mMap == null)
+            return;
+        for (Lugar l : arregloLugares) {
+            // Add a marker in Sydney and move the camera
+            LatLng sydney = new LatLng(l.getLat(), l.getLng());
+
+            Marker m = mMap.addMarker(new MarkerOptions().position(sydney).icon(BitmapDescriptorFactory.fromResource(R.drawable.pin)).title(l.getNombre()));
+            hmap.put(m, l);
+        }
+        mMap.animateCamera(CameraUpdateFactory.newCameraPosition(new CameraPosition.Builder()
+                .target(new LatLng(-2.146291d, -79.964617d)).tilt(90).zoom(19).build()));
     }
 }
