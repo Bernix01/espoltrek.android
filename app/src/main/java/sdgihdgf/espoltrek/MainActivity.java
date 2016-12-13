@@ -53,6 +53,35 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
         SupportMapFragment mapFragment = (SupportMapFragment) getSupportFragmentManager()
                 .findFragmentById(R.id.map);
         mapFragment.getMapAsync(this);
+        checkuser();
+    }
+
+    private void checkuser() {
+        if (!ETRest.get().isLoggedIn())
+            return;
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    protected void onPostResume() {
+        super.onPostResume();
+        invalidateOptionsMenu();
+    }
+
+    @Override
+    public boolean onPrepareOptionsMenu(Menu menu) {
+        if (ETRest.get().isLoggedIn()) {
+            menu.getItem(0).setTitle(ETRest.get().getCurrentUser().getNickname());
+            menu.getItem(0).setOnMenuItemClickListener(new MenuItem.OnMenuItemClickListener() {
+                @Override
+                public boolean onMenuItemClick(MenuItem item) {
+                    ETRest.get().logout();
+                    invalidateOptionsMenu();
+                    return true;
+                }
+            });
+        }
+        return super.onPrepareOptionsMenu(menu);
     }
 
     @Override

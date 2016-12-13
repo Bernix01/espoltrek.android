@@ -5,6 +5,7 @@ package sdgihdgf.espoltrek.models;
  */
 
 public class Usuario {
+    private final String email;
     private String nombres,apellidos,nickname,contrasenia;
     private int id;
 
@@ -13,14 +14,21 @@ public class Usuario {
         apellidos="";
         nickname="";
         contrasenia="";
+        email = "";
     }
 
-    public Usuario(String nombres, String apellidos,String nickname, String contrasenia, int id){
+    public Usuario(String nombres, String apellidos, String nickname, String contrasenia, int id, String email) {
         this.nombres=nombres;
         this.apellidos=apellidos;
+        this.email = email;
         this.nickname=nickname;
         this.contrasenia=contrasenia;
         this.id=id;
+    }
+
+    public Usuario(String mEmail, String mPassword) {
+        this.email = mEmail;
+        this.contrasenia = mPassword;
     }
 
     public String getNombres() {
