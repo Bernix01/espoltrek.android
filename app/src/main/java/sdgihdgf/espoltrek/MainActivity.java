@@ -133,7 +133,11 @@ public class MainActivity extends AppCompatActivity implements OnMapReadyCallbac
             public boolean onMarkerClick(Marker marker) {
                 Intent i = new Intent(getApplicationContext(), LugarActivity.class);
                 Lugar l = hmap.get(marker);
-                i.putExtra("lugar", l);
+                Log.i("nombre",l.getNombre());
+                Bundle b = new Bundle();
+                b.putParcelable("lugar",l);
+                i.putExtras(b);
+
                 startActivity(i);
                 return true;
             }

@@ -15,7 +15,7 @@ public class ETRest {
     private Usuario currentUser;
     protected ETRest() {
         rest = new Retrofit.Builder()
-                .baseUrl("http://192.168.100.2:8000/")
+                .baseUrl("http://192.168.189.2:8000/")
                 .addConverterFactory(GsonConverterFactory.create())
                 .build();
         sosRestService = rest.create(EspolTrekInterface.class);

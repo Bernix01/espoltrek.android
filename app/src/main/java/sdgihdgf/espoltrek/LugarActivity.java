@@ -11,6 +11,8 @@ import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.widget.Toolbar;
 import android.text.Html;
 import android.text.method.LinkMovementMethod;
 import android.util.Log;
@@ -25,14 +27,17 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.StringReader;
+import java.util.concurrent.ThreadLocalRandom;
 
 import sdgihdgf.espoltrek.models.Lugar;
 
-public class LugarActivity extends Activity {
+public class LugarActivity extends AppCompatActivity {
 
     private static final String TAG = LugarActivity.class.getSimpleName();
     /** Actual panorama widget. **/
     private VrPanoramaView panoWidgetView;
+    Lugar l;
     /**
      * Arbitrary variable to track load status. In this example, this variable should only be accessed
      * on the UI thread. In a real app, this variable would be code that performs some UI actions when
@@ -51,10 +56,19 @@ public class LugarActivity extends Activity {
         setContentView(R.layout.activity_lugar);
 //        savedInstanceState.get("lugar");
         // Make the source link clickable.
-
+        l = (Lugar) this.getIntent().getExtras().getParcelable("lugar");
         panoWidgetView = (VrPanoramaView) findViewById(R.id.pano_view);
         panoWidgetView.setEventListener(new ActivityEventListener());
+        if(l == null) {
+            finish();
+            return;
+        }
 
+        Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setTitle(l.getNombre());
+        TextView descr = (TextView) findViewById(R.id.txtdescripcion);
+        descr.setText(l.getDescripcion());
         // Initial launch of the app or an Activity recreation due to rotation.
         handleIntent(getIntent());
     }
@@ -121,6 +135,7 @@ public class LugarActivity extends Activity {
     @Override
     protected void onDestroy() {
         // Destroy the widget and free memory.
+        panoWidgetView.pauseRendering();
         panoWidgetView.shutdown();
 
         // The background task has a 5 second timeout so it can potentially stay alive for 5 seconds
@@ -147,7 +162,8 @@ public class LugarActivity extends Activity {
                     || fileInformation[0] == null || fileInformation[0].first == null) {
                 AssetManager assetManager = getAssets();
                 try {
-                    istr = assetManager.open("parqueaja.jpg");
+                    String archivo = getRandomAsset();
+                    istr = assetManager.open(archivo);
                     panoOptions = new VrPanoramaView.Options();
                     panoOptions.inputType = VrPanoramaView.Options.TYPE_MONO;
                 } catch (IOException e) {
@@ -173,6 +189,11 @@ public class LugarActivity extends Activity {
 
             return true;
         }
+    }
+
+    private String getRandomAsset() {
+        String datos[] = {"auditorio_fimcp.jpg","fiec_nueva_1.jpg","fiec_parqueo_profesores.jpg","fiec_vieja_5.jpg","parqueaja.jpg"};
+        return datos[(int)(Math.random()*5)];
     }
 
     /**

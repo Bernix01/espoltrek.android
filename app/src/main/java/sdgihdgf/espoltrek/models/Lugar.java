@@ -1,11 +1,14 @@
 package sdgihdgf.espoltrek.models;
 
+import android.os.Parcel;
+import android.os.Parcelable;
+
 import java.io.Serializable;
 import java.util.ArrayList;
 
 
 
-public class Lugar implements Serializable {
+public class Lugar implements Parcelable {
 
     private float lat, lng;
     private String nombre, descripcion;
@@ -27,6 +30,26 @@ public class Lugar implements Serializable {
         this.tags = null;
 
     }
+
+    protected Lugar(Parcel in) {
+        lat = in.readFloat();
+        lng = in.readFloat();
+        nombre = in.readString();
+        descripcion = in.readString();
+        tags = in.createStringArrayList();
+    }
+
+    public static final Creator<Lugar> CREATOR = new Creator<Lugar>() {
+        @Override
+        public Lugar createFromParcel(Parcel in) {
+            return new Lugar(in);
+        }
+
+        @Override
+        public Lugar[] newArray(int size) {
+            return new Lugar[size];
+        }
+    };
 
     public float getLat() {
         return lat;
@@ -69,4 +92,17 @@ public class Lugar implements Serializable {
     }
 
 
+    @Override
+    public int describeContents() {
+        return 0;
+    }
+
+    @Override
+    public void writeToParcel(Parcel parcel, int i) {
+        parcel.writeFloat(lat);
+        parcel.writeFloat(lng);
+        parcel.writeString(nombre);
+        parcel.writeString(descripcion);
+        parcel.writeStringList(tags);
+    }
 }
